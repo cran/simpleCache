@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2017-08-21" />
+<meta name="date" content="2017-08-22" />
 
 <title>An introduction to simpleCache</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">An introduction to simpleCache</h1>
 <h4 class="author"><em>Nathan Sheffield</em></h4>
-<h4 class="date"><em>2017-08-21</em></h4>
+<h4 class="date"><em>2017-08-22</em></h4>
 
 
 
@@ -85,7 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
 <span class="kw">setCacheDir</span>(cacheDir)
 <span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</code></pre></div>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp.RData</code></pre>
 <p>Now, watch what happens when we run that same function call again:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</code></pre></div>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
@@ -97,10 +97,10 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># But we can force reload and get it back with reload=TRUE</span>
 <span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">reload=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp.RData</code></pre>
 <p>What if we want to start over and blow that cache, getting a new random set? Use the <code>recreate</code> flag if you want to ensure that the cache is produced and overwritten even if it already exists:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp.RData</code></pre>
 <p>With just those parameters (cache name, instruction, recreate, and reload), you should be able to make good use of <code>simpleCache</code>. The essence is: if the object exists in memory already: do nothing. If it does not exist in memory, but exists on disk: load it into memory. If it exists neither in memory or on disk: create it and store it to disk and memory. Now you’ve got the basics.</p>
 <p>But there’s more if you want it: read on!</p>
 </div>
@@ -126,11 +126,11 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
     cacheName =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, i)
     <span class="kw">simpleCache</span>(cacheName, { <span class="kw">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>, <span class="dt">noload=</span><span class="ot">TRUE</span>)
 }</code></pre></div>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_1.RData</code></pre>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_2.RData</code></pre>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_3.RData</code></pre>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_4.RData</code></pre>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_5.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_1.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_2.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_3.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_4.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_5.RData</code></pre>
 <p>We’ve now produced 5 different sample data caches. They exist on disk, but not in memory. This could, for example, be done in an initial data-generation or setup script. We then may be interested in using these (same) caches in several downstream scripts, and we could do some iterative operation on them and use <code>assignTo</code> to avoid loading more than 1 at a time into memory:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">overallMinimum =<span class="st"> </span><span class="fl">1e6</span>  <span class="co"># pick some high number to start</span>
 <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
@@ -138,24 +138,24 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
     <span class="kw">simpleCache</span>(cacheName, <span class="dt">assignTo=</span><span class="st">&quot;temp&quot;</span>)
     overallMinimum =<span class="st"> </span><span class="kw">min</span>(overallMinimum, temp)
 }</code></pre></div>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_5.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_5.RData</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">message</span>(overallMinimum)</code></pre></div>
-<pre><code>## -5.39135309297277</code></pre>
+<pre><code>## -5.05655395402276</code></pre>
 <p>In this code block, by assigning the caches to the variable <code>temp</code>, we only have 1 in memory at a time, because each cache load overwrites the previous one, which is exactly what we want in this case. We keep track of the minimum value of each one independently, and we’ve effectively calculated an overall minimum while loading only a single cache in memory at a time.</p>
 </div>
 <div id="loading-multiple-caches" class="section level2">
 <h2>Loading multiple caches</h2>
 <p>If you’ve got a bunch of caches and you want them all in memory, you could just load all the caches into memory with this convenience alias:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loadCaches</span>(<span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))</code></pre></div>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmpat20cf/normSamp_5.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_5.RData</code></pre>
 <p>The disadvantage of doing it this way is that you’ve lost the advantage of using the single <code>simpleCache()</code> function for both saving and loading, but this may be desirable in some cases.</p>
 <p>By the way, once a cache is created, you no longer need to provide instructions:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>)</code></pre></div>
@@ -166,8 +166,8 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
 <h2>Timing cache creating</h2>
 <p>If you want to record how long it takes to create a new cache, you can set <code>timer=TRUE</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>, <span class="dt">timer=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/normSamp.RData</code></pre>
-<pre><code>## &lt;00h 00m 0.1s&gt;</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp.RData</code></pre>
+<pre><code>## &lt;00h 00m 0.2s&gt;</code></pre>
 </div>
 <div id="complicated-code" class="section level2">
 <h2>Complicated code</h2>
@@ -176,23 +176,33 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
     dat2 =<span class="st"> </span><span class="kw">rnorm</span>(<span class="fl">1e5</span>, <span class="fl">0.05</span>,<span class="dv">2</span>)
     <span class="kw">t.test</span>(normSamp, dat2)
     }, <span class="dt">recreate=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmpat20cf/tResult.RData</code></pre>
+<pre><code>## ::Creating cache::   /scratch/ns5bc/tmp//Rtmp4fw5f2/tResult.RData</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tResult</code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  normSamp and dat2
-## t = -9.5115, df = 105060, p-value &lt; 2.2e-16
+## t = -8.5849, df = 105090, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -0.07333886 -0.04827786
+##  -0.06730460 -0.04228478
 ## sample estimates:
-##    mean of x    mean of y 
-## -0.001239422  0.059568937</code></pre>
+##   mean of x   mean of y 
+## 0.001377969 0.056172659</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tResult<span class="op">$</span>p.value</code></pre></div>
-<pre><code>## [1] 1.917477e-21</code></pre>
+<pre><code>## [1] 9.20952e-18</code></pre>
 <p>The point is that the code could be quite complicated and time-consuming. You may only want to calculate it once, and then re-use the result in another script – or in this same script next time you run it. <code>simpleCache</code> makes that, well, simple.</p>
 <p>That’s the end of the basics. There are a few more advanced options as well, such as using a shared cache directory, submitting compute requests to a cluster using <code>batchtools</code>, tweaking the loading environment with the <code>loadEnvir</code> parameter (if you need to call <code>simpleCache()</code> from within a function), and tweaking the cache building resources with the <code>buildEnvir</code> parameter. But these options are more advanced and probably not needed for 95% of <code>simpleCache</code> use cases. If you do need more information, you can find further help in the other vignettes or in the detailed R function documentation (see <code>?simpleCache</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="st">&quot;normSamp&quot;</span>, <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp.RData</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_1.RData</code></pre>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_2.RData</code></pre>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_3.RData</code></pre>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_4.RData</code></pre>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/normSamp_5.RData</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="st">&quot;tResult&quot;</span>, <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Deleting /scratch/ns5bc/tmp//Rtmp4fw5f2/tResult.RData</code></pre>
 </div>
 </div>
 

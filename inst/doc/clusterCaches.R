@@ -7,7 +7,9 @@
 #  registry$cluster.functions = batchtools::makeClusterFunctionsSlurm(
 #    template = templateFile)
 #  registry
-#  
+
+## ------------------------------------------------------------------------
+resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
 
 ## ---- eval=FALSE---------------------------------------------------------
 #  simpleCache("testBatch", {

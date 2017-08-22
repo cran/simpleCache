@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2017-08-21" />
+<meta name="date" content="2017-08-22" />
 
 <title>Generating caches on a cluster</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Generating caches on a cluster</h1>
 <h4 class="author"><em>Nathan Sheffield</em></h4>
-<h4 class="date"><em>2017-08-21</em></h4>
+<h4 class="date"><em>2017-08-22</em></h4>
 
 
 
@@ -88,8 +88,7 @@ registry<span class="op">$</span>cluster.functions =<span class="st"> </span>bat
   <span class="dt">template =</span> templateFile)
 registry</code></pre></div>
 <p>Notice that I’m using a custom slurm template here. With a registry in hand, we next need to define the resources this cache job will require:</p>
-<pre><code>resources = list(ncpus=1, memory=1000, walltime=60, partition=&quot;serial&quot;)
-</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resources =<span class="st"> </span><span class="kw">list</span>(<span class="dt">ncpus=</span><span class="dv">1</span>, <span class="dt">memory=</span><span class="dv">1000</span>, <span class="dt">walltime=</span><span class="dv">60</span>, <span class="dt">partition=</span><span class="st">&quot;serial&quot;</span>)</code></pre></div>
 <p>Then, we simply add these as arguments to <code>simpleCache()</code> like so:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;testBatch&quot;</span>, {
   <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>, <span class="dv">1</span>)

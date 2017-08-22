@@ -57,3 +57,8 @@ simpleCache("tResult", {
 tResult
 tResult$p.value
 
+## ----Clean up------------------------------------------------------------
+deleteCaches("normSamp", force=TRUE)
+deleteCaches(paste0("normSamp_", 1:5), force=TRUE)
+deleteCaches("tResult", force=TRUE)
+
