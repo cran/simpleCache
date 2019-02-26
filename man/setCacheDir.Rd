@@ -3,16 +3,16 @@
 \name{setCacheDir}
 \alias{setCacheDir}
 \title{Sets a global variable specifying the default cache directory for
-simpleCache() calls.}
+\code{\link{simpleCache}} calls.}
 \usage{
-setCacheDir(cacheDir)
+setCacheDir(cacheDir = NULL)
 }
 \arguments{
 \item{cacheDir}{Directory where caches should be stored}
 }
 \description{
 Sets a global variable specifying the default cache directory for
-simpleCache() calls.
+\code{\link{simpleCache}} calls.
 }
 \examples{
 # choose location to store caches

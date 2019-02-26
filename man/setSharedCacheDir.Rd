@@ -4,13 +4,13 @@
 \alias{setSharedCacheDir}
 \title{Set shared cache directory}
 \usage{
-setSharedCacheDir(sharedCacheDir)
+setSharedCacheDir(sharedCacheDir = NULL)
 }
 \arguments{
 \item{sharedCacheDir}{Directory where shared caches should be stored}
 }
 \description{
 Sets global variable specifying the default cache directory for
-simpleCacheShared() calls; this function is simply a helper alias for caching
+\code{\link{simpleCacheShared}} calls; this function is simply a helper alias for caching
 results that will be used across projects.
 }
