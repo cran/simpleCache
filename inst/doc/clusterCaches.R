@@ -1,4 +1,4 @@
-## ----Try it out, eval=FALSE----------------------------------------------
+## ----Try it out, eval=FALSE---------------------------------------------------
 #  library(simpleCache)
 #  setCacheDir(tempdir())
 #  
@@ -8,15 +8,15 @@
 #    template = templateFile)
 #  registry
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  simpleCache("testBatch", {
 #    rnorm(1e7, 0, 1)
 #    }, batchRegistry=registry, batchResources=resources)
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  batchtools::getJobTable(reg=registry)
 #  batchtools::getJobPars()
 #  batchtools::getStatus()
@@ -27,6 +27,6 @@ resources = list(ncpus=1, memory=1000, walltime=60, partition="serial")
 #  # batchtools::testJob(1, reg=registry)
 #  # killJobs()
 
-## ---- eval=FALSE---------------------------------------------------------
+## ---- eval=FALSE--------------------------------------------------------------
 #  batchtools::removeRegistry(reg=registry)
 

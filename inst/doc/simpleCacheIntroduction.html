@@ -1,60 +1,105 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2019-02-26" />
+<meta name="date" content="2021-04-16" />
 
 <title>An introduction to simpleCache</title>
 
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 
 </style>
 <script>
@@ -70,7 +115,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -81,7 +126,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20800px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%2020px%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%200%3B%0Apadding%3A%204px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%3B%0Amin%2Dwidth%3A%2040%25%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%5Bsummary%3D%22R%20argblock%22%5D%20%7B%0Awidth%3A%20100%25%3B%0Aborder%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%2C%20table%3Anot%28%5Bclass%5D%29%20th%2C%20table%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20tr%2Eodd%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%2013px%3B%0Apadding%2Dbottom%3A%201px%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Aoverflow%2Dx%3A%20auto%3B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200%2010px%200%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20white%3B%0Aborder%3A%20%23f5f5f5%201px%20solid%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20code%20%7B%0Acolor%3A%20%23444%3B%0Abackground%2Dcolor%3A%20white%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20monospace%3B%0Afont%2Dsize%3A%2090%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%204px%3B%0Acolor%3A%20%23d14%3B%0Aborder%3A%201px%20solid%20%23e1e1e8%3B%0Awhite%2Dspace%3A%20inherit%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Atable%20%3E%20caption%2C%20div%2Efigure%20p%2Ecaption%20%7B%0Afont%2Dstyle%3A%20italic%3B%0A%7D%0Atable%20%3E%20caption%20span%2C%20div%2Efigure%20p%2Ecaption%20span%20%7B%0Afont%2Dstyle%3A%20normal%3B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%200%2010px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%20auto%2010px%20auto%3B%0A%7D%0Aimg%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0Amax%2Dwidth%3A%20100%25%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f5f5f5%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Adiv%2Er%2Dhelp%2Dpage%20%7B%0Abackground%2Dcolor%3A%20%23f9f9f9%3B%0Aborder%2Dbottom%3A%20%23ddd%201px%20solid%3B%0Amargin%2Dbottom%3A%2010px%3B%0Apadding%3A%2010px%3B%0A%7D%0Adiv%2Er%2Dhelp%2Dpage%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f4f4f4%3B%0A%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20800px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%2020px%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%200%3B%0Apadding%3A%204px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%3B%0Amin%2Dwidth%3A%2040%25%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%5Bsummary%3D%22R%20argblock%22%5D%20%7B%0Awidth%3A%20100%25%3B%0Aborder%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%2C%20table%3Anot%28%5Bclass%5D%29%20th%2C%20table%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20tr%2Eodd%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%2013px%3B%0Apadding%2Dbottom%3A%201px%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Aoverflow%2Dx%3A%20auto%3B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200%2010px%200%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20white%3B%0Aborder%3A%20%23f5f5f5%201px%20solid%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20code%20%7B%0Acolor%3A%20%23444%3B%0Abackground%2Dcolor%3A%20white%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20monospace%3B%0Afont%2Dsize%3A%2090%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%204px%3B%0Acolor%3A%20%23d14%3B%0Aborder%3A%201px%20solid%20%23e1e1e8%3B%0Awhite%2Dspace%3A%20inherit%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Atable%20%3E%20caption%2C%20div%2Efigure%20p%2Ecaption%20%7B%0Afont%2Dstyle%3A%20italic%3B%0A%7D%0Atable%20%3E%20caption%20span%2C%20div%2Efigure%20p%2Ecaption%20span%20%7B%0Afont%2Dstyle%3A%20normal%3B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%200%2010px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%20auto%2010px%20auto%3B%0A%7D%0Aimg%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0Amax%2Dwidth%3A%20100%25%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f5f5f5%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Adiv%2Er%2Dhelp%2Dpage%20%7B%0Abackground%2Dcolor%3A%20%23f9f9f9%3B%0Aborder%2Dbottom%3A%20%23ddd%201px%20solid%3B%0Amargin%2Dbottom%3A%2010px%3B%0Apadding%3A%2010px%3B%0A%7D%0Adiv%2Er%2Dhelp%2Dpage%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f4f4f4%3B%0A%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
 
 </head>
 
@@ -91,8 +140,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">An introduction to simpleCache</h1>
-<h4 class="author"><em>Nathan Sheffield</em></h4>
-<h4 class="date"><em>2019-02-26</em></h4>
+<h4 class="author">Nathan Sheffield</h4>
+<h4 class="date">2021-04-16</h4>
 
 
 
@@ -103,26 +152,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><code>simpleCache</code> has 2 main use cases: First, it can help you pick up where you left off in an R session, and second, it can help you parallelize code by enabling you to share results across R sessions.</p>
 <p>The workhorse of <code>simpleCache</code> is the eponymous <code>simpleCache()</code> function, which in the simplest case requires just two parameters: a cache name, and a block of code. The cache name should be considered unique and its underlying object immutable, while the block of code (or <em>instruction</em>) is the <code>R</code> code that generates the object you wish to cache.</p>
 <p>But before we start creating caches, it’s important to tell <code>simpleCache</code> where to store the caches. <code>simpleCache</code> uses a global variable (<code>RCACHE.DIR</code>) for caches, and provides a setter function (<code>setCacheDir()</code>) to change this. To get started, choose a cache directory, and generate some random data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(simpleCache)
-cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
-<span class="kw">setCacheDir</span>(cacheDir)
-<span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</code></pre></div>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp.RData</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(simpleCache)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>cacheDir <span class="ot">=</span> <span class="fu">tempdir</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">setCacheDir</span>(cacheDir)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</span></code></pre></div>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp.RData</code></pre>
 <p>Now, watch what happens when we run that same function call again:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</span></code></pre></div>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
 <p>Notice that the second call to <code>simpleCache()</code> doesn’t re-run the <code>rnorm</code> calculation. In fact, it doesn’t even re-load the cache, because it notices that it’s already in memory. If the cache weren’t already in memory, this call would load it from disk. This means you can put this code in multiple scripts and pull the same randomized data, without re-doing the compute work.</p>
 <p>You can also force a cache to reload using the <code>reload</code> option. This could be useful, for example, if you’ve loaded a cache and then accidentally changed it, and want to reset. By default, a call to <code>simpleCache()</code> will not reload an object that already exists in your environment. But you can always force it with the <code>reload</code> parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">normSamp =<span class="st"> </span><span class="ot">NA</span>  <span class="co"># Oops broke my object in memory.</span>
-<span class="co"># Regular call won't reload because we have an object called normSamp already:</span>
-<span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>normSamp <span class="ot">=</span> <span class="cn">NA</span>  <span class="co"># Oops broke my object in memory.</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Regular call won&#39;t reload because we have an object called normSamp already:</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) })</span></code></pre></div>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># But we can force reload and get it back with reload=TRUE</span>
-<span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">reload=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp.RData</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># But we can force reload and get it back with reload=TRUE</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="at">reload=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp.RData</code></pre>
 <p>What if we want to start over and blow that cache, getting a new random set? Use the <code>recreate</code> flag if you want to ensure that the cache is produced and overwritten even if it already exists:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp.RData</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="at">recreate=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp.RData</code></pre>
 <p>With just those parameters (cache name, instruction, recreate, and reload), you should be able to make good use of <code>simpleCache</code>. The essence is: if the object exists in memory already: do nothing. If it does not exist in memory, but exists on disk: load it into memory. If it exists neither in memory or on disk: create it and store it to disk and memory. Now you’ve got the basics.</p>
 <p>But there’s more if you want it: read on!</p>
 </div>
@@ -134,97 +183,97 @@ cacheDir =<span class="st"> </span><span class="kw">tempdir</span>()
 <div id="cache-names" class="section level2">
 <h2>Cache names</h2>
 <p>By default, the object will be loaded into a variable with the same name as the cache. You can change this behavior with the <code>assignTo</code> parameter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">assignTo=</span><span class="st">&quot;mySamp&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e7</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="at">assignTo=</span><span class="st">&quot;mySamp&quot;</span>)</span></code></pre></div>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
 <p>After doing this command, we have both <code>normSamp</code> (from the previous calls, not from this one) and <code>mySamp</code> (loaded in this call) in the workspace, and these objects are identical:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">identical</span>(normSamp, mySamp)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">identical</span>(normSamp, mySamp)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>This <code>assignTo</code> concept is useful if you want to create caches but not load them, or load caches one at a time. Which leads us to…</p>
 </div>
 <div id="creating-but-not-loading-caches" class="section level2">
 <h2>Creating but not loading caches</h2>
 <p>It may be that you want to create a bunch of caches that are quite memory intensive, and you don’t actually need them all in this particular R workspace at the same time. If you just create each object and save it, you’ll end with all those objects in memory at the same time. Instead, you can use the <code>noload</code> parameter, which will create the caches but not load them into memory (so the object will be cached, but will not persist in this R environment). I use this frequently in a setup script to build caches that I will need later in individual scripts that will run on each one individually. Let’s make 5 caches but not load them:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
-    cacheName =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, i)
-    <span class="kw">simpleCache</span>(cacheName, { <span class="kw">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>, <span class="dt">noload=</span><span class="ot">TRUE</span>)
-}</code></pre></div>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp_1.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp_2.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp_3.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp_4.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp_5.RData</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    cacheName <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, i)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">simpleCache</span>(cacheName, { <span class="fu">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="at">recreate=</span><span class="cn">TRUE</span>, <span class="at">noload=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp_1.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp_2.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp_3.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp_4.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp_5.RData</code></pre>
 <p>We’ve now produced 5 different sample data caches. They exist on disk, but not in memory. This could, for example, be done in an initial data-generation or setup script. We then may be interested in using these (same) caches in several downstream scripts, and we could do some iterative operation on them and use <code>assignTo</code> to avoid loading more than 1 at a time into memory:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">overallMinimum =<span class="st"> </span><span class="fl">1e6</span>  <span class="co"># pick some high number to start</span>
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {
-    cacheName =<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, i)
-    <span class="kw">simpleCache</span>(cacheName, <span class="dt">assignTo=</span><span class="st">&quot;temp&quot;</span>)
-    overallMinimum =<span class="st"> </span><span class="kw">min</span>(overallMinimum, temp)
-}</code></pre></div>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_5.RData</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">message</span>(overallMinimum)</code></pre></div>
-<pre><code>## -5.20212879143301</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>overallMinimum <span class="ot">=</span> <span class="fl">1e6</span>  <span class="co"># pick some high number to start</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    cacheName <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, i)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">simpleCache</span>(cacheName, <span class="at">assignTo=</span><span class="st">&quot;temp&quot;</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    overallMinimum <span class="ot">=</span> <span class="fu">min</span>(overallMinimum, temp)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_5.RData</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(overallMinimum)</span></code></pre></div>
+<pre><code>## -5.17454717164529</code></pre>
 <p>In this code block, by assigning the caches to the variable <code>temp</code>, we only have 1 in memory at a time, because each cache load overwrites the previous one, which is exactly what we want in this case. We keep track of the minimum value of each one independently, and we’ve effectively calculated an overall minimum while loading only a single cache in memory at a time.</p>
 </div>
 <div id="loading-multiple-caches" class="section level2">
 <h2>Loading multiple caches</h2>
 <p>If you’ve got a bunch of caches and you want them all in memory, you could just load all the caches into memory with this convenience alias:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">loadCaches</span>(<span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>))</code></pre></div>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpE07dng/normSamp_5.RData</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">loadCaches</span>(<span class="fu">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span></code></pre></div>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmpknnJ2b/normSamp_5.RData</code></pre>
 <p>The disadvantage of doing it this way is that you’ve lost the advantage of using the single <code>simpleCache()</code> function for both saving and loading, but this may be desirable in some cases.</p>
 <p>By the way, once a cache is created, you no longer need to provide instructions:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>)</span></code></pre></div>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
 <p><code>simpleCache</code> will load it if it can; if not, it will give you an error saying it requires an <code>instruction</code>.</p>
 </div>
 <div id="timing-cache-creating" class="section level2">
 <h2>Timing cache creating</h2>
 <p>If you want to record how long it takes to create a new cache, you can set <code>timer=TRUE</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="kw">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="dt">recreate=</span><span class="ot">TRUE</span>, <span class="dt">timer=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/normSamp.RData</code></pre>
-<pre><code>## &lt;00h 00m 0.1s&gt;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;normSamp&quot;</span>, { <span class="fu">rnorm</span>(<span class="fl">1e6</span>, <span class="dv">0</span>,<span class="dv">1</span>) }, <span class="at">recreate=</span><span class="cn">TRUE</span>, <span class="at">timer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/normSamp.RData</code></pre>
+<pre><code>## &lt;00h 00m 0.0s&gt;</code></pre>
 </div>
 <div id="complicated-code" class="section level2">
 <h2>Complicated code</h2>
 <p>So far, our examples have cached the result of a very simple instruction code block: the <code>rnorm</code> call to randomly generate some numbers. But really, simpleCache can be used to cache anything. The code block can be whatever you want; whatever it returns will be cached. For example, let’s cache the result of a call to <code>t.test()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">simpleCache</span>(<span class="st">&quot;tResult&quot;</span>, { 
-    dat2 =<span class="st"> </span><span class="kw">rnorm</span>(<span class="fl">1e5</span>, <span class="fl">0.05</span>,<span class="dv">2</span>)
-    <span class="kw">t.test</span>(normSamp, dat2)
-    }, <span class="dt">recreate=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## ::Creating cache::   /tmp/RtmpE07dng/tResult.RData</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tResult</code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">simpleCache</span>(<span class="st">&quot;tResult&quot;</span>, { </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    dat2 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="fl">1e5</span>, <span class="fl">0.05</span>,<span class="dv">2</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t.test</span>(normSamp, dat2)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    }, <span class="at">recreate=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## ::Creating cache::   /tmp/RtmpknnJ2b/tResult.RData</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>tResult</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  normSamp and dat2
-## t = -8.6051, df = 105080, p-value &lt; 2.2e-16
+## t = -6.0996, df = 105061, p-value = 1.067e-09
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -0.06753740 -0.04247897
+##  -0.05159564 -0.02650100
 ## sample estimates:
 ##     mean of x     mean of y 
-## -0.0006278338  0.0543803516</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tResult<span class="op">$</span>p.value</code></pre></div>
-<pre><code>## [1] 7.726922e-18</code></pre>
+## -6.645276e-05  3.898187e-02</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tResult<span class="sc">$</span>p.value</span></code></pre></div>
+<pre><code>## [1] 1.066751e-09</code></pre>
 <p>The point is that the code could be quite complicated and time-consuming. You may only want to calculate it once, and then re-use the result in another script – or in this same script next time you run it. <code>simpleCache</code> makes that, well, simple.</p>
 <p>That’s the end of the basics. There are a few more advanced options as well, such as using a shared cache directory, submitting compute requests to a cluster using <code>batchtools</code>, tweaking the loading environment with the <code>loadEnvir</code> parameter (if you need to call <code>simpleCache()</code> from within a function), and tweaking the cache building resources with the <code>buildEnvir</code> parameter. But these options are more advanced and probably not needed for 95% of <code>simpleCache</code> use cases. If you do need more information, you can find further help in the other vignettes or in the detailed R function documentation (see <code>?simpleCache</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="st">&quot;normSamp&quot;</span>, <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp.RData</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="kw">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp_1.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp_2.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp_3.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp_4.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpE07dng/normSamp_5.RData</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">deleteCaches</span>(<span class="st">&quot;tResult&quot;</span>, <span class="dt">force=</span><span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## Deleting /tmp/RtmpE07dng/tResult.RData</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deleteCaches</span>(<span class="st">&quot;normSamp&quot;</span>, <span class="at">force=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp.RData</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deleteCaches</span>(<span class="fu">paste0</span>(<span class="st">&quot;normSamp_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>), <span class="at">force=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp_1.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp_2.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp_3.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp_4.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/normSamp_5.RData</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">deleteCaches</span>(<span class="st">&quot;tResult&quot;</span>, <span class="at">force=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Deleting /tmp/RtmpknnJ2b/tResult.RData</code></pre>
 </div>
 </div>
 
@@ -248,6 +297,9 @@ window.onload = function() {
   }
 }
 </script>
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
