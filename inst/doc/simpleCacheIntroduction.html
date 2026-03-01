@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2026-02-27" />
+<meta name="date" content="2026-02-28" />
 
 <title>An introduction to simpleCache</title>
 
@@ -62,7 +62,7 @@ ul.task-list{list-style: none;}
 
 <h1 class="title toc-ignore">An introduction to simpleCache</h1>
 <h4 class="author">Nathan Sheffield</h4>
-<h4 class="date">2026-02-27</h4>
+<h4 class="date">2026-02-28</h4>
 
 
 
@@ -89,7 +89,7 @@ cache directory, and generate some random data.</p>
 cacheDir = tempdir()
 setCacheDir(cacheDir)
 simpleCache(&quot;normSamp&quot;, { rnorm(1e7, 0,1) })</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp.RData</code></pre>
 <p>Now, watch what happens when we run that same function call
 again:</p>
 <pre class="r"><code>simpleCache(&quot;normSamp&quot;, { rnorm(1e7, 0,1) })</code></pre>
@@ -112,13 +112,13 @@ simpleCache(&quot;normSamp&quot;, { rnorm(1e7, 0,1) })</code></pre>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSamp</code></pre>
 <pre class="r"><code># But we can force reload and get it back with reload=TRUE
 simpleCache(&quot;normSamp&quot;, { rnorm(1e7, 0,1) }, reload=TRUE)</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp.RData</code></pre>
 <p>What if we want to start over and blow that cache, getting a new
 random set? Use the <code>recreate</code> flag if you want to ensure
 that the cache is produced and overwritten even if it already
 exists:</p>
 <pre class="r"><code>simpleCache(&quot;normSamp&quot;, { rnorm(1e7, 0,1) }, recreate=TRUE)</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp.RData</code></pre>
 <p>With just those parameters (cache name, instruction, recreate, and
 reload), you should be able to make good use of
 <code>simpleCache</code>. The essence is: if the object exists in memory
@@ -182,11 +182,11 @@ caches but not load them:</p>
     cacheName = paste0(&quot;normSamp_&quot;, i)
     simpleCache(cacheName, { rnorm(1e6, 0,1) }, recreate=TRUE, noload=TRUE)
 }</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp_1.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp_2.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp_3.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp_4.RData</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp_5.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp_1.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp_2.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp_3.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp_4.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp_5.RData</code></pre>
 <p>We’ve now produced 5 different sample data caches. They exist on
 disk, but not in memory. This could, for example, be done in an initial
 data-generation or setup script. We then may be interested in using
@@ -199,13 +199,13 @@ for (i in 1:5) {
     simpleCache(cacheName, assignTo=&quot;temp&quot;)
     overallMinimum = min(overallMinimum, temp)
 }</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_5.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_5.RData</code></pre>
 <pre class="r"><code>message(overallMinimum)</code></pre>
-<pre><code>## -4.74769784411471</code></pre>
+<pre><code>## -5.1561115758998</code></pre>
 <p>In this code block, by assigning the caches to the variable
 <code>temp</code>, we only have 1 in memory at a time, because each
 cache load overwrites the previous one, which is exactly what we want in
@@ -219,11 +219,11 @@ single cache in memory at a time.</p>
 could just load all the caches into memory with this convenience
 alias:</p>
 <pre class="r"><code>loadCaches(paste0(&quot;normSamp_&quot;, 1:5))</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_1.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_2.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_3.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_4.RData</code></pre>
-<pre><code>## ::Loading cache::    /tmp/RtmpXJsAAF/normSamp_5.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_1.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_2.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_3.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_4.RData</code></pre>
+<pre><code>## ::Loading cache::    /tmp/RtmphQ0KcY/normSamp_5.RData</code></pre>
 <p>The disadvantage of doing it this way is that you’ve lost the
 advantage of using the single <code>simpleCache()</code> function for
 both saving and loading, but this may be desirable in some cases.</p>
@@ -239,7 +239,7 @@ you an error saying it requires an <code>instruction</code>.</p>
 <p>If you want to record how long it takes to create a new cache, you
 can set <code>timer=TRUE</code>.</p>
 <pre class="r"><code>simpleCache(&quot;normSamp&quot;, { rnorm(1e6, 0,1) }, recreate=TRUE, timer=TRUE)</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSamp.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSamp.RData</code></pre>
 <pre><code>## &lt;00h 00m 0.0s&gt;</code></pre>
 </div>
 <div id="complicated-code" class="section level2">
@@ -254,25 +254,55 @@ For example, let’s cache the result of a call to
     dat2 = rnorm(1e5, 0.05,2)
     t.test(normSamp, dat2)
     }, recreate=TRUE)</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/tResult.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/tResult.RData</code></pre>
 <pre class="r"><code>tResult</code></pre>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  normSamp and dat2
-## t = -8.2201, df = 105028, p-value &lt; 2.2e-16
+## t = -9.2789, df = 105067, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -0.06531687 -0.04016585
+##  -0.07186948 -0.04680240
 ## sample estimates:
-##    mean of x    mean of y 
-## 0.0005271108 0.0532684711</code></pre>
+##     mean of x     mean of y 
+## -0.0007476115  0.0585883246</code></pre>
 <pre class="r"><code>tResult$p.value</code></pre>
-<pre><code>## [1] 2.055639e-16</code></pre>
+<pre><code>## [1] 1.743317e-20</code></pre>
 <p>The point is that the code could be quite complicated and
 time-consuming. You may only want to calculate it once, and then re-use
 the result in another script – or in this same script next time you run
 it. <code>simpleCache</code> makes that, well, simple.</p>
+</div>
+<div id="custom-serialization-backends" class="section level2">
+<h2>Custom serialization backends</h2>
+<p>By default, <code>simpleCache</code> uses base R
+<code>save()</code>/<code>load()</code> with <code>.RData</code> files.
+You can swap in any serialization format by setting the
+<code>RCACHE.BACKEND</code> option. The option takes a list with three
+elements:</p>
+<ul>
+<li><strong>save</strong>: a function with signature
+<code>function(obj, file)</code> that writes <code>obj</code> to
+<code>file</code></li>
+<li><strong>load</strong>: a function with signature
+<code>function(file)</code> that reads and returns the object</li>
+<li><strong>ext</strong>: the file extension (e.g.,
+<code>&quot;.qs2&quot;</code>)</li>
+</ul>
+<p>For example, to use the fast <code>qs2</code> serialization:</p>
+<pre class="r"><code>options(RCACHE.BACKEND = list(
+  save = function(obj, file) qs2::qs_save(obj, file),
+  load = function(file) qs2::qs_read(file),
+  ext  = &quot;.qs2&quot;
+))</code></pre>
+<p>Once set, all <code>simpleCache()</code>, <code>storeCache()</code>,
+<code>listCaches()</code>, and <code>deleteCaches()</code> calls use the
+custom backend. To switch back to the default, reset the option:</p>
+<pre class="r"><code>options(RCACHE.BACKEND = NULL)</code></pre>
+<p>Note that <code>listCaches()</code> and <code>deleteCaches()</code>
+only operate on the current backend’s extension. If you switch backends,
+old-format caches are still on disk but won’t appear in listings.</p>
 <p>That’s the end of the basics. There are a few more advanced options
 as well, such as using a shared cache directory, submitting compute
 requests to a cluster using <code>batchtools</code>, tweaking the
@@ -284,15 +314,15 @@ for 95% of <code>simpleCache</code> use cases. If you do need more
 information, you can find further help in the other vignettes or in the
 detailed R function documentation (see <code>?simpleCache</code>).</p>
 <pre class="r"><code>deleteCaches(&quot;normSamp&quot;, force=TRUE)</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp.RData</code></pre>
 <pre class="r"><code>deleteCaches(paste0(&quot;normSamp_&quot;, 1:5), force=TRUE)</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp_1.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp_2.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp_3.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp_4.RData</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/normSamp_5.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp_1.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp_2.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp_3.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp_4.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/normSamp_5.RData</code></pre>
 <pre class="r"><code>deleteCaches(&quot;tResult&quot;, force=TRUE)</code></pre>
-<pre><code>## Deleting /tmp/RtmpXJsAAF/tResult.RData</code></pre>
+<pre><code>## Deleting /tmp/RtmphQ0KcY/tResult.RData</code></pre>
 </div>
 </div>
 

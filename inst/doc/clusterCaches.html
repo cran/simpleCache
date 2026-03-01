@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2026-02-27" />
+<meta name="date" content="2026-02-28" />
 
 <title>Generating caches on a cluster</title>
 
@@ -62,7 +62,7 @@ ul.task-list{list-style: none;}
 
 <h1 class="title toc-ignore">Generating caches on a cluster</h1>
 <h4 class="author">Nathan Sheffield</h4>
-<h4 class="date">2026-02-27</h4>
+<h4 class="date">2026-02-28</h4>
 
 
 
@@ -115,6 +115,18 @@ batchtools::loadResult(1, reg=registry)
 <pre class="r"><code>batchtools::removeRegistry(reg=registry)</code></pre>
 <p>See <code>batchtools</code> documentation for more details on using
 registries.</p>
+</div>
+<div id="lock-files" class="section level1">
+<h1>Lock files</h1>
+<p>When a cache is submitted to the cluster, <code>simpleCache</code>
+creates a <code>.lock</code> file so that if you later call
+<code>simpleCache</code> for the same cache — whether you forgot the job
+was running or are working locally — it will see the lock and skip
+rebuilding. The lock file is removed automatically when the cluster job
+completes. This mechanism is a simple convenience guard, not a robust
+concurrency lock — it is possible for two processes to both check for
+the lock file before either creates it, resulting in duplicate
+builds.</p>
 </div>
 
 

@@ -12,7 +12,7 @@
 
 <meta name="author" content="Nathan Sheffield" />
 
-<meta name="date" content="2026-02-27" />
+<meta name="date" content="2026-02-28" />
 
 <title>Sharing caches across projects</title>
 
@@ -62,7 +62,7 @@ ul.task-list{list-style: none;}
 
 <h1 class="title toc-ignore">Sharing caches across projects</h1>
 <h4 class="author">Nathan Sheffield</h4>
-<h4 class="date">2026-02-27</h4>
+<h4 class="date">2026-02-28</h4>
 
 
 
@@ -86,7 +86,7 @@ outlined below:</p>
 cacheDir = tempdir()
 setSharedCacheDir(cacheDir)
 simpleCacheShared(&quot;normSample&quot;, { rnorm(1e7, 0,1) }, recreate=TRUE)</code></pre>
-<pre><code>## ::Creating cache::   /tmp/RtmpXJsAAF/normSample.RData</code></pre>
+<pre><code>## ::Creating cache::   /tmp/RtmphQ0KcY/normSample.RData</code></pre>
 <pre class="r"><code>simpleCacheShared(&quot;normSample&quot;, { rnorm(1e7, 0,1) })</code></pre>
 <pre><code>## ::Object exists (in .GlobalEnv)::    normSample</code></pre>
 <pre class="r"><code>deleteCaches(&quot;normSample&quot;, force=TRUE)</code></pre>

@@ -1,6 +1,6 @@
 Package: simpleCache
-Version: 0.4.3
-Date: 2026-02-26
+Version: 0.5.0
+Date: 2026-02-27
 Title: Simply Caching R Objects
 Description: Provides intuitive functions for caching R objects, encouraging
     reproducible, restartable, and distributed R analysis. The user selects a
@@ -22,9 +22,9 @@ URL: https://github.com/databio/simpleCache
 BugReports: https://github.com/databio/simpleCache/issues
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2026-02-27 00:54:46 UTC; nsheff
+Packaged: 2026-02-28 03:02:10 UTC; nsheff
 Author: VP Nagraj [aut],
   Nathan Sheffield [aut, cre]
 Maintainer: Nathan Sheffield <nathan@code.databio.org>
 Repository: CRAN
-Date/Publication: 2026-02-27 01:10:02 UTC
+Date/Publication: 2026-03-01 22:50:02 UTC
